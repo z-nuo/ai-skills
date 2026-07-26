@@ -1,0 +1,4 @@
+interface:
+  display_name: "Microservice Interface Design"
+  short_description: "Design and review REST and gRPC contracts"
+  default_prompt: "Use $designing-microservice-interfaces to design or review a REST or gRPC contract."

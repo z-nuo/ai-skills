@@ -1,0 +1,4 @@
+interface:
+  display_name: "Data Consistency Design"
+  short_description: "Design reliable MySQL Redis and messaging flows"
+  default_prompt: "Use $designing-data-consistency to design or review this distributed data flow."

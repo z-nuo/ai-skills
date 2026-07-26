@@ -1,0 +1,4 @@
+interface:
+  display_name: "先澄清，再解决"
+  short_description: "在提出最终方案前逐步澄清复杂、模糊或信息不足的真实需求"
+  default_prompt: "使用 $clarifying-before-solving 在提出方案前逐步澄清我的真实需求。"

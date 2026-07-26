@@ -1,0 +1,4 @@
+interface:
+  display_name: "Backend Service Testing"
+  short_description: "Write and review Go and PHP backend tests"
+  default_prompt: "Use $testing-backend-services to design, write, and run tests for this backend change."

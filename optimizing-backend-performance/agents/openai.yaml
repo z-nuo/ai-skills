@@ -1,0 +1,4 @@
+interface:
+  display_name: "Backend Performance Optimization"
+  short_description: "Diagnose and optimize Go/PHP backend performance"
+  default_prompt: "Use $optimizing-backend-performance to diagnose this backend bottleneck and design a safe, reproducible optimization experiment."

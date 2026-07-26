@@ -1,0 +1,28 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDE
+.idea/
+.vscode/
+
+# Logs
+*.log
+
+# Temp files
+*.tmp
+*.temp
+.cache/
+
+# Node (in case any skill uses tooling)
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Agent workflow artifacts
+.superpowers/

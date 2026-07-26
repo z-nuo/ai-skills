@@ -1,0 +1,4 @@
+interface:
+  display_name: "Production Observability"
+  short_description: "Design telemetry and diagnose backend incidents"
+  default_prompt: "Use $observing-production-services to design observability or diagnose this production issue."
