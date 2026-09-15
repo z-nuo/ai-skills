@@ -1,0 +1,4 @@
+interface:
+  display_name: "最小改动范围检查"
+  short_description: "逐项核对需求与代码差异，限制无关改动并保留必要调用链修正"
+  default_prompt: "使用 $minimal-change-guard 完成本次修改，逐块核对差异与需求，保留已有工作树改动并报告验证结果。"

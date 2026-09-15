@@ -1,8 +1,8 @@
 # Skills
 
-仓库地址：[https://github.com/z-nuo/ai-skills](https://gitee.com/z-nuo/skills)
+仓库地址：[GitHub](https://github.com/z-nuo/ai-skills) ｜ [Gitee 镜像](https://gitee.com/z-nuo/skills)
 
-面向 Go/PHP 后端工程与高质量交互的 Codex Skill 集合。仓库当前包含 7 个 Skill，覆盖沟通规范、需求澄清、微服务接口、数据一致性、自动化测试、性能工程和生产可观测性。
+面向 Go/PHP 后端工程与高质量交互的 Codex Skill 集合。仓库当前包含 8 个 Skill，覆盖沟通规范、需求澄清、改动范围、微服务接口、数据一致性、自动化测试、性能工程和生产可观测性。
 
 ## 快速选择
 
@@ -10,13 +10,14 @@
 |---|---|---|
 | 默认使用中文与用户沟通 | [`chinese-communication`](chinese-communication/SKILL.md) | 语言选择与交付物语言边界 |
 | 在复杂或模糊问题前逐步澄清需求 | [`clarifying-before-solving`](clarifying-before-solving/SKILL.md) | 单问题访谈、需求确认与显式假设 |
+| 修改或废弃既有代码、限制改动范围、纠正过度修改 | [`minimal-change-guard`](minimal-change-guard/SKILL.md) | 需求与 diff 对照、必要调用链修正、范围纠偏 |
 | 设计或评审 REST/gRPC 接口 | [`designing-microservice-interfaces`](designing-microservice-interfaces/SKILL.md) | 契约、兼容性、迁移与验证 |
 | 设计跨存储或消息的数据一致性 | [`designing-data-consistency`](designing-data-consistency/SKILL.md) | 不变量、失败矩阵、恢复与对账 |
 | 编写或评审 Go/PHP 后端测试 | [`testing-backend-services`](testing-backend-services/SKILL.md) | 测试矩阵、RED/GREEN 证据与风险 |
 | 诊断性能或规划容量 | [`optimizing-backend-performance`](optimizing-backend-performance/SKILL.md) | 基线、假设、实验与回滚 |
 | 设计观测或排查生产故障 | [`observing-production-services`](observing-production-services/SKILL.md) | SLI/SLO、遥测、时间线与恢复验证 |
 
-`chinese-communication` 和 `clarifying-before-solving` 分别负责沟通语言与需求澄清。其余 5 个 Skill 各自负责一个后端工程领域；跨领域任务应先确定主问题，再按职责边界组合其他 Skill。
+`chinese-communication`、`clarifying-before-solving` 和 `minimal-change-guard` 分别负责沟通语言、需求澄清与改动范围。其余 5 个 Skill 各自负责一个后端工程领域；跨领域任务应先确定主问题，再按职责边界组合其他 Skill。
 
 使用时可直接在请求中指定 Skill，例如：
 
@@ -41,6 +42,14 @@
 - **默认输出**：每轮一个最高价值问题；信息充分后先复述需求并等待确认；用户要求直接回答时列出假设后给出当前最佳方案。
 - **参考资料**：没有独立 reference，全部规则位于 [`SKILL.md`](clarifying-before-solving/SKILL.md)。
 - **OpenAI 配置**：[`agents/openai.yaml`](clarifying-before-solving/agents/openai.yaml)。
+
+### `minimal-change-guard`
+
+- **用途**：将现有代码的每处修改对应到明确需求或机械适配的连带变更，限制无关扩展。
+- **适用场景**：修改、删除、废弃或替换既有代码时的范围核对；用户要求最小改动、限定文件、保持其他逻辑不变，或指出改动范围已扩大需要撤销多余修改。
+- **默认输出**：修改文件与需求对应关系、必要连带变更原因、实际验证结果及未覆盖边界。
+- **参考资料**：没有独立 reference，全部规则位于 [`SKILL.md`](minimal-change-guard/SKILL.md)。
+- **OpenAI 配置**：[`agents/openai.yaml`](minimal-change-guard/agents/openai.yaml)。
 
 ### `designing-microservice-interfaces`
 
@@ -87,6 +96,8 @@
 组合多个 Skill 时，先选择拥有主要问题和最终交付物的主 Skill，再按实际跨越的边界加载辅助 Skill。不要为了“覆盖全面”而无条件加载全部 Skill。
 
 任务复杂、模糊或缺少关键约束时，先用 `clarifying-before-solving` 确认真实需求，再选择负责最终交付物的领域 Skill。简单明确的任务直接进入领域 Skill。
+
+修改、删除或废弃既有代码时，使用 `minimal-change-guard` 核对需求与差异，再按实际需要配合领域 Skill；只读范围审查不自动修改代码，也不要求额外审批已明确授权的工作。
 
 ### 新微服务能力
 
@@ -143,9 +154,9 @@
 
 ## 当前完整性说明
 
-截至 2026-07-27，仓库盘点结果如下：
+截至 2026-09-15，仓库盘点结果如下：
 
-- 7 个 `SKILL.md`。
+- 8 个 `SKILL.md`。
 - 20 个实际存在的 reference 文件。
-- 6 个 `agents/openai.yaml`；`chinese-communication` 当前没有 OpenAI 界面配置。
+- 7 个 `agents/openai.yaml`；`chinese-communication` 当前没有 OpenAI 界面配置。
 - `optimizing-backend-performance/SKILL.md` 引用了 `references/load-testing.md`，该文件当前缺失。本 README 不为它创建无效链接。
