@@ -2,7 +2,7 @@
 
 仓库地址：[GitHub](https://github.com/z-nuo/ai-skills) ｜ [Gitee 镜像](https://gitee.com/z-nuo/skills)
 
-面向 Go/PHP 后端工程与高质量交互的 Codex Skill 集合。仓库当前包含 8 个 Skill，覆盖沟通规范、需求澄清、改动范围、微服务接口、数据一致性、自动化测试、性能工程和生产可观测性。
+面向 Go/PHP 后端工程与高质量交互的 Codex Skill 集合。仓库当前包含 10 个 Skill，覆盖沟通规范、需求澄清、改动范围、微服务接口、数据一致性、自动化测试、性能工程、生产可观测性、Freetalk 多仓库业务分析和 PHP 发布审查。
 
 ## 快速选择
 
@@ -10,14 +10,16 @@
 |---|---|---|
 | 默认使用中文与用户沟通 | [`chinese-communication`](chinese-communication/SKILL.md) | 语言选择与交付物语言边界 |
 | 在复杂或模糊问题前逐步澄清需求 | [`clarifying-before-solving`](clarifying-before-solving/SKILL.md) | 单问题访谈、需求确认与显式假设 |
-| 修改或废弃既有代码、限制改动范围、纠正过度修改 | [`minimal-change-guard`](minimal-change-guard/SKILL.md) | 需求与 diff 对照、必要调用链修正、范围纠偏 |
+| 生成必要且简洁的代码、减少多余判断、限制改动范围 | [`minimal-change-guard`](minimal-change-guard/SKILL.md) | 逐段必要性检查、重复校验与封装清理、必要调用链修正 |
+| 定位 Freetalk PHP 项目、分析完整业务或跨仓库参数变化 | [`working-with-freetalk-php`](working-with-freetalk-php/SKILL.md) | 项目入口、依赖版本、业务链路、资源边界与交接文档 |
+| 判断 PHP 当前改动能否上线、更新后重新检查 | [`reviewing-php-release-readiness`](reviewing-php-release-readiness/SKILL.md) | 基线、调用方、语法与 token 验证、发布门禁及部署条件 |
 | 设计或评审 REST/gRPC 接口 | [`designing-microservice-interfaces`](designing-microservice-interfaces/SKILL.md) | 契约、兼容性、迁移与验证 |
 | 设计跨存储或消息的数据一致性 | [`designing-data-consistency`](designing-data-consistency/SKILL.md) | 不变量、失败矩阵、恢复与对账 |
 | 编写或评审 Go/PHP 后端测试 | [`testing-backend-services`](testing-backend-services/SKILL.md) | 测试矩阵、RED/GREEN 证据与风险 |
 | 诊断性能或规划容量 | [`optimizing-backend-performance`](optimizing-backend-performance/SKILL.md) | 基线、假设、实验与回滚 |
 | 设计观测或排查生产故障 | [`observing-production-services`](observing-production-services/SKILL.md) | SLI/SLO、遥测、时间线与恢复验证 |
 
-`chinese-communication`、`clarifying-before-solving` 和 `minimal-change-guard` 分别负责沟通语言、需求澄清与改动范围。其余 5 个 Skill 各自负责一个后端工程领域；跨领域任务应先确定主问题，再按职责边界组合其他 Skill。
+`chinese-communication`、`clarifying-before-solving` 和 `minimal-change-guard` 分别负责沟通语言、需求澄清与改动范围。5 个通用后端领域 Skill 负责设计、测试、性能和观测；`working-with-freetalk-php` 提供项目定位与业务链路，`reviewing-php-release-readiness` 负责 PHP 发布结论。跨领域任务先确定主问题，再按职责边界组合。
 
 使用时可直接在请求中指定 Skill，例如：
 
@@ -45,11 +47,27 @@
 
 ### `minimal-change-guard`
 
-- **用途**：将现有代码的每处修改对应到明确需求或机械适配的连带变更，限制无关扩展。
-- **适用场景**：修改、删除、废弃或替换既有代码时的范围核对；用户要求最小改动、限定文件、保持其他逻辑不变，或指出改动范围已扩大需要撤销多余修改。
-- **默认输出**：修改文件与需求对应关系、必要连带变更原因、实际验证结果及未覆盖边界。
+- **用途**：要求每段生成的代码都有需求、已确认契约或具体失败风险依据，非必要不生成，同时控制改动范围。
+- **适用场景**：新增、修改、删除、废弃或替换代码；要求代码简洁、减少判断、限制文件范围，或只读审查过度设计与冗余。
+- **默认输出**：必要实现及其依据、范围和冗余检查、实际验证结果及未覆盖边界；保留必要鉴权、防重与失败处理。
 - **参考资料**：没有独立 reference，全部规则位于 [`SKILL.md`](minimal-change-guard/SKILL.md)。
 - **OpenAI 配置**：[`agents/openai.yaml`](minimal-change-guard/agents/openai.yaml)。
+
+### `working-with-freetalk-php`
+
+- **用途**：在 Freetalk PHP 项目间定位入口、依赖和业务数据变化，形成有源码证据的调用链或交接文档。
+- **适用场景**：`client_activity`、`backendV2`、`shop`、`family`、`prize_server` 与公共包的跨仓库分析、参数异常、发奖链路、功能废弃和 QConf/Redis 依赖追踪。
+- **默认输出**：入口与字段变化、下游副作用、配置/key、失败语义、源码索引及运行验证边界。
+- **参考资料**：[`项目地图`](working-with-freetalk-php/references/project-map.md)、[`业务链路`](working-with-freetalk-php/references/business-flows.md)、[`资源与运行边界`](working-with-freetalk-php/references/resources-and-runtime.md)。按当前问题加载。
+- **OpenAI 配置**：[`agents/openai.yaml`](working-with-freetalk-php/agents/openai.yaml)。
+
+### `reviewing-php-release-readiness`
+
+- **用途**：对 PHP 当前工作树、指定提交或分支给出源码层发布门禁，区分本次新增问题与已有问题。
+- **适用场景**：判断能否上线、更新后复审、删除闭环检查、注释/格式改动、旧 PHP 版本兼容和进程部署条件。
+- **默认输出**：当前基线、按严重程度排列的发现、实际验证、发布条件与线上未验证项。审查默认只读。
+- **参考资料**：[`验证方法与发布边界`](reviewing-php-release-readiness/references/verification.md)；[`非注释 token 比较脚本`](reviewing-php-release-readiness/scripts/compare_php_tokens.php) 只读取文件，退出码区分一致、不同和错误。
+- **OpenAI 配置**：[`agents/openai.yaml`](reviewing-php-release-readiness/agents/openai.yaml)。
 
 ### `designing-microservice-interfaces`
 
@@ -72,7 +90,7 @@
 - **用途**：用最小且可信的自动化测试证明 Go/PHP 后端行为，或评审已有测试的检测能力与稳定性。
 - **适用场景**：新行为与缺陷修复的 TDD、既有行为的特征测试、单元/集成/API/契约测试、测试隔离和质量评审。
 - **默认输出**：测试目标、边界与用例矩阵、测试代码及环境、RED/GREEN 证据和剩余风险。
-- **参考资料**：[`Go`](testing-backend-services/references/go.md)、[`PHP`](testing-backend-services/references/php.md)、[`Testcontainers 与集成测试`](testing-backend-services/references/integration.md)。
+- **参考资料**：[`Go`](testing-backend-services/references/go.md)、[`PHP`](testing-backend-services/references/php.md)、[`Testcontainers 与集成测试`](testing-backend-services/references/integration.md)。PHP 参考包含旧版本与脚本式项目的验证边界。
 - **OpenAI 配置**：[`agents/openai.yaml`](testing-backend-services/agents/openai.yaml)。
 
 ### `optimizing-backend-performance`
@@ -80,7 +98,7 @@
 - **用途**：基于可复现证据诊断和改善 Go/PHP 后端的延迟、吞吐、资源使用、消息积压与容量。
 - **适用场景**：性能诊断、单变量实验、优化方案评审、压测设计、MySQL/Redis 或 Kafka/RabbitMQ 瓶颈分析、容量规划。
 - **默认输出**：目标差距、workload 与基线、假设表、实验设计、同条件结果、正确性与资源成本、回滚和重新校准条件。
-- **参考资料**：[`性能方法论`](optimizing-backend-performance/references/methodology.md)、[`Go`](optimizing-backend-performance/references/go.md)、[`PHP`](optimizing-backend-performance/references/php.md)、[`MySQL 与 Redis`](optimizing-backend-performance/references/data-stores.md)、[`Kafka 与 RabbitMQ`](optimizing-backend-performance/references/messaging.md)。`references/load-testing.md` 当前缺失，虽然主 Skill 已引用该主题，但仓库尚未提供对应文件。
+- **参考资料**：[`性能方法论`](optimizing-backend-performance/references/methodology.md)、[`Go`](optimizing-backend-performance/references/go.md)、[`PHP`](optimizing-backend-performance/references/php.md)、[`MySQL 与 Redis`](optimizing-backend-performance/references/data-stores.md)、[`Kafka 与 RabbitMQ`](optimizing-backend-performance/references/messaging.md)、[`压测与容量验证`](optimizing-backend-performance/references/load-testing.md)。
 - **OpenAI 配置**：[`agents/openai.yaml`](optimizing-backend-performance/agents/openai.yaml)。
 
 ### `observing-production-services`
@@ -97,7 +115,14 @@
 
 任务复杂、模糊或缺少关键约束时，先用 `clarifying-before-solving` 确认真实需求，再选择负责最终交付物的领域 Skill。简单明确的任务直接进入领域 Skill。
 
-修改、删除或废弃既有代码时，使用 `minimal-change-guard` 核对需求与差异，再按实际需要配合领域 Skill；只读范围审查不自动修改代码，也不要求额外审批已明确授权的工作。
+新增或修改代码时，使用 `minimal-change-guard` 逐段核对必要性与范围：同一边界内的输入校验一次，复用下游规则和 wrapper，查询与抽象必须有当前用途。具体规则以该技能为准，再按实际需要配合领域 Skill；只读审查不自动修改代码，也不要求额外审批已明确授权的工作。
+
+### Freetalk 业务修改与发布
+
+1. 用 `working-with-freetalk-php` 确认当前项目规则、入口、实际依赖版本、字段变换和下游副作用。
+2. 已授权修改时，用 `minimal-change-guard` 控制写入范围；需要行为测试时选 `testing-backend-services`，先检查脚本副作用与运行版本。
+3. 用户要求判断能否上线时，以 `reviewing-php-release-readiness` 复核当前完整补丁和调用闭环，给出源码发布门禁及部署条件。
+4. 真实运行故障使用 `observing-production-services` 收集证据；源码结论不替代线上配置和到账验证。
 
 ### 新微服务能力
 
@@ -133,11 +158,14 @@
     └── <topic>.md
 ```
 
+需要可复用的确定性操作时可增加 `scripts/`，例如发布审查的 PHP token 比较器；脚本依赖与副作用应在技能中说明。
+
 | 文件 | 职责 |
 |---|---|
 | `SKILL.md` | 定义 frontmatter、触发条件、核心工作流、职责边界、默认交付物与红线，是 Skill 的入口和事实来源 |
 | `references/*.md` | 保存协议、语言、中间件或方法论的详细规则，由 `SKILL.md` 按当前任务渐进式加载 |
 | `agents/openai.yaml` | 定义 OpenAI 界面中的展示名称、简短描述和默认调用提示词 |
+| `scripts/` | 保存只在任务需要时运行的可复用工具，不代替业务验证 |
 
 ## 维护约定
 
@@ -154,9 +182,13 @@
 
 ## 当前完整性说明
 
-截至 2026-09-15，仓库盘点结果如下：
+截至 2026-11-04，仓库盘点结果如下：
 
-- 8 个 `SKILL.md`。
-- 20 个实际存在的 reference 文件。
-- 7 个 `agents/openai.yaml`；`chinese-communication` 当前没有 OpenAI 界面配置。
-- `optimizing-backend-performance/SKILL.md` 引用了 `references/load-testing.md`，该文件当前缺失。本 README 不为它创建无效链接。
+- 10 个 `SKILL.md`。
+- 25 个实际存在的 reference 文件。
+- 9 个 `agents/openai.yaml`；`chinese-communication` 当前没有 OpenAI 界面配置。
+- 1 个只读 PHP token 比较脚本。
+- 已补齐性能技能引用的 `references/load-testing.md`。
+- 本轮项目覆盖、源码依据和技能更新范围见 [`项目与技能分析`](docs/analysis/2026-11-04-php-project-skill-analysis.md)。
+
+本仓库是技能源文件集合。更新这里不会自动替换各机器已安装的技能；按现有安装方式安装或同步需要的技能目录后生效。

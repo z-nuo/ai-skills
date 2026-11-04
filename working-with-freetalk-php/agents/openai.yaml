@@ -1,0 +1,4 @@
+interface:
+  display_name: "Freetalk PHP 项目与业务链路"
+  short_description: "定位 Freetalk 多仓库入口、追踪业务参数与资源依赖，并明确验证边界"
+  default_prompt: "使用 $working-with-freetalk-php 分析指定入口的完整业务链路，给出源码证据、下游影响和未验证边界。"

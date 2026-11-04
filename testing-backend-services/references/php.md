@@ -3,28 +3,37 @@
 ## 目录
 
 - [仓库约定](#仓库约定)
-- [PHPUnit与Pest](#phpunit与pest)
+- [旧版 PHP 与脚本式项目](#旧版-php-与脚本式项目)
+- [PHPUnit 与 Pest](#phpunit-与-pest)
 - [用例与断言](#用例与断言)
-- [依赖与Test-Double](#依赖与test-double)
-- [HTTP与契约测试](#http与契约测试)
+- [依赖与 Test Double](#依赖与-test-double)
+- [HTTP 与契约测试](#http-与契约测试)
 - [状态隔离](#状态隔离)
 - [命令与证据](#命令与证据)
 - [评审清单](#评审清单)
 
 ## 仓库约定
 
-先阅读 `composer.json`、`phpunit.xml`、`phpunit.xml.dist`、`Pest.php`、测试基类、框架配置和 CI。优先运行 Composer scripts，复用仓库已有 factory、fixture、容器和数据库重置策略。
+先阅读 `composer.json` 和实际存在的 `phpunit.xml`、`phpunit.xml.dist`、`Pest.php`、测试基类、框架配置和 CI。先检查 Composer scripts 的实际内容与副作用，再选择命令，复用仓库已有 factory、fixture、容器和数据库重置策略。
 
 - 使用仓库已选定的 PHPUnit 或 Pest 版本和写法，不在同一模块混入另一种风格。
 - 使用与生产一致的 PHP 版本、extensions、时区和序列化配置。
 - 明确测试运行于普通 CLI 进程还是 Swoole/Hyperf 等长驻进程模型。
 - 不为单个测试增加 Mockery、Prophecy 或新断言库；只有仓库已有时复用。
 
+## 旧版 PHP 与脚本式项目
+
+- 从 PHP 约束、部署说明和已有代码确认版本，再检查实际 `php -v`、必要的 ini 与扩展。PHP 7/8 lint 通过不能证明 PHP 5.6 兼容；目标解释器不可用时明确未运行目标版本验证。
+- 不预设依赖目录为 `vendor/`；读取 `config.vendor-dir` 和入口 autoload。`Composer/`、`composer/` 可能是依赖目录，`Vendor/` 也可能包含自有业务代码。
+- 没有 PHPUnit/Pest 时，先读已有脚本的 bootstrap、配置与副作用。`tests/` 内可能直接访问 QConf、Redis、RPC、队列、支付或奖励服务；执行条件未满足时使用静态检查或不触达外部资源的最小替身，不直接运行集成脚本。
+- 复用现有设施即可验证时，不为流程完整性升级 PHP、安装框架或添加持久化测试依赖。临时验证脚本不需要进入交付补丁。
+- 仅注释/格式变更优先 lint 与非注释 token 对比，单独检查 docblock 注解、`__LINE__` 等语义；不必运行带真实副作用的业务入口来验证语法。
+
 ## PHPUnit 与 Pest
 
 PHPUnit 测试方法或 Pest case 的名称必须表达场景和结果。共享输入矩阵时使用 data provider 或 Pest dataset，但每个 case 仍只验证一个行为。
 
-PHPUnit data provider 示例：
+以下为支持 attributes 的 PHP/PHPUnit 项目的 data provider 示例；PHP 5.6/7.3 项目使用已安装版本的 annotation 或配置，不复制此语法：
 
 ```php
 <?php

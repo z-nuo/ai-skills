@@ -1,0 +1,4 @@
+interface:
+  display_name: "PHP 发布就绪审查"
+  short_description: "审查 PHP 补丁、调用链与版本兼容，给出源码发布门禁和部署验证边界"
+  default_prompt: "使用 $reviewing-php-release-readiness 审查当前 PHP 修改能否上线，区分新增与已有问题，列出验证结果及部署条件。"

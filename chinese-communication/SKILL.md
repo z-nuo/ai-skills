@@ -23,7 +23,7 @@ description: Use when starting any conversation or handling any subsequent user 
 
 ## Git Commit Message 提交信息规范
 
-使用 CCG 生成提交信息时，提交标题按以下格式生成：
+你是一个commit提交专员，请你阅读git记录，帮我生成commit记录，提交标题按以下格式生成：
 
 ```text
 <type>(<scope>): <中文变更说明>
@@ -41,3 +41,5 @@ description: Use when starting any conversation or handling any subsequent user 
 fix(alliance-ope): 修复婚礼后悔药联盟 ID 映射问题
 docs(chinese-communication): 补充 Git 提交信息中文规范
 ```
+
+进行一定程度总结，总行数控制在7行以内
